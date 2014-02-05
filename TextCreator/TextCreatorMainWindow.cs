@@ -59,7 +59,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
             double buildHeight = ActiveSliceSettings.Instance.BuildHeight;
 
-            part3DView = new View3DTextCreator(new Vector3(ActiveSliceSettings.Instance.BedSize, buildHeight));
+            part3DView = new View3DTextCreator(new Vector3(ActiveSliceSettings.Instance.BedSize, buildHeight), ActiveSliceSettings.Instance.BedShape);
 
             this.AddChild(part3DView);
             this.AnchorAll();
