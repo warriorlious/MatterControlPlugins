@@ -505,7 +505,7 @@ namespace MatterHackers.MatterControl.Plugins.OutlineCreator
                 {
                     PathStorage vectorShape = PlatingHelper.PolygonToPathStorage(polygonShape);
 
-                    Mesh outlineMesh = VertexSourceToMesh.Convert(vectorShape, 10);
+                    Mesh outlineMesh = VertexSourceToMesh.Extrude(vectorShape, 10);
 
                     if (outlineMesh.Faces.Count > 0)
                     {

@@ -477,7 +477,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
                 int newIndex = asynchMeshesList.Count;
 
                 TypeFacePrinter letterPrinter = new TypeFacePrinter(currentText[i].ToString(), new StyledTypeFace(boldTypeFace, 12));
-                Mesh textMesh = VertexSourceToMesh.Convert(letterPrinter, 10 + (i%2));
+                Mesh textMesh = VertexSourceToMesh.Extrude(letterPrinter, 10 + (i%2));
 
                 if (textMesh.Faces.Count > 0)
                 {
