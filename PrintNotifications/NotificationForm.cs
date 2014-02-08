@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
-
 using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
 using MatterHackers.Agg.UI;
-using MatterHackers.Agg.OpenGlGui;
-using MatterHackers.PolygonMesh;
-using MatterHackers.RenderOpenGl;
-using MatterHackers.VectorMath;
-using MatterHackers.MatterControl.DataStorage;
-using MatterHackers.MatterControl.PrintQueue;
-using MatterHackers.MatterControl.VersionManagement;
 using MatterHackers.MatterControl.FieldValidation;
+using MatterHackers.MatterControl.VersionManagement;
+using MatterHackers.VectorMath;
 
 namespace MatterHackers.MatterControl.Plugins.PrintNotifications
 {
