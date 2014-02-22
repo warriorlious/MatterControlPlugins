@@ -46,14 +46,12 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
             string notifyHoverIconPath = Path.Combine("Icons", "PrintStatusControls", "notify-hover.png");
             Button notifyButton = imageButtonFactory.Generate(notifyIconPath, notifyHoverIconPath);
             notifyButton.Cursor = Cursors.Hand;
+            notifyButton.Margin = new Agg.BorderDouble(top: 3);
             notifyButton.Click += (sender, mouseEvent) => { NotificationFormWindow.Open(); };
             notifyButton.MouseEnterBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.ShowHoverText("Edit notification settings"); };
             notifyButton.MouseLeaveBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.HideHoverText(); };
 
-            GuiWidget horizontalSpacer = new GuiWidget();
-            horizontalSpacer.HAnchor = HAnchor.ParentLeftRight;
-            GuiWidget topRow = FindNamedWidgetRecursive(mainApplication, "PrintStatusRow.ActivePrinterInfo.TopRow");
-            topRow.AddChild(horizontalSpacer);
+            GuiWidget topRow = FindNamedWidgetRecursive(mainApplication, "PrintStatusRow.IconContainer");
             topRow.AddChild(notifyButton);
         }
 
