@@ -88,10 +88,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
         Button saveAndExitButton;
         Button closeButton;
         String word;
-        PrintItem printItem;
-        PrintItemWrapper printItemWrapper;
-        PrintLibraryListItem queueItem;
-
 
         List<Mesh> asynchMeshesList = new List<Mesh>();
         List<Matrix4X4> asynchMeshTransforms = new List<Matrix4X4>();
@@ -1055,41 +1051,11 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
                 Mesh mergedMesh = PlatingHelper.DoMerge(asynchMeshesList, backgroundWorker, 40, 80, true);
 
-                bool overwriteExistingItem = (printItem != null);
-                if (!overwriteExistingItem)
-                {
-                    
-                    printItem = new PrintItem();
-                    printItem.Commit();
-                }
-
-                string fileName = string.Format("UserCreated{0}.stl", printItem.Id);
+                string fileName = string.Format("UserCreated_{0}.stl", Path.GetRandomFileName());
                 string filePath = Path.Combine(ApplicationDataStorage.Instance.ApplicationLibraryDataPath, fileName);
                 StlProcessing.Save(mergedMesh, filePath);
 
-                printItem.Name = string.Format("{0}", word);
-                printItem.FileLocation = System.IO.Path.GetFullPath(filePath);
-                printItem.PrintItemCollectionID = PrintLibraryListControl.Instance.LibraryCollection.Id;
-                printItem.Commit();
-
-
-                if (!overwriteExistingItem)
-                {
-                    printItemWrapper = new PrintItemWrapper(printItem);                    
-
-                    queueItem = new PrintLibraryListItem(printItemWrapper);
-
-                    PrintLibraryListControl.Instance.AddChild(queueItem);
-                    PrintLibraryListControl.Instance.Invalidate();
-                    PrintLibraryListControl.Instance.SaveLibraryItems();
-                }
-                else
-                {
-                    queueItem.Name = printItem.Name;
-                    printItemWrapper.OnFileHasChanged();
-                    PrintLibraryListControl.Instance.Invalidate();
-                    PrintLibraryListControl.Instance.SaveLibraryItems();
-                }
+                e.Result = filePath;
             }
             catch (System.UnauthorizedAccessException)
             {
@@ -1104,18 +1070,28 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
         void mergeAndSavePartsBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            string filePath = e.Result as string;
+            if (filePath != null)
+            {
+                PrintItem printItem = new PrintItem();
+                printItem.Commit();
+
+                printItem.Name = string.Format("{0}", word);
+                printItem.FileLocation = System.IO.Path.GetFullPath(filePath);
+                printItem.PrintItemCollectionID = PrintLibraryListControl.Instance.LibraryCollection.Id;
+                printItem.Commit();
+
+                PrintItemWrapper printItemWrapper = new PrintItemWrapper(printItem);
+
+                PrintLibraryListItem queueItem = new PrintLibraryListItem(printItemWrapper);
+
+                PrintLibraryListControl.Instance.AddChild(queueItem);
+                PrintLibraryListControl.Instance.Invalidate();
+                PrintLibraryListControl.Instance.SaveLibraryItems();
+            }
+
             //Exit after save
             Close();
-            
-            //UnlockEditControls();
-            //// NOTE: we do not pull the data back out of the asynch lists.
-            //saveButton.Visible = false;
-            //saveAndExitButton.Visible = false;
-
-            //if (partSelectButtonWasClicked)
-            //{
-            //    partSelectButton.ClickButton(null);
-            //}
         }
 
         bool scaleQueueMenu_Click()
