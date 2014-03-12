@@ -470,7 +470,7 @@ namespace MatterHackers.MatterControl.Plugins.OutlineCreator
             foreach (string imagePathAndFile in openParams.FileNames)
             {
                 ImageBuffer imageToOutline = new ImageBuffer(new BlenderBGRA());
-                ImageBMPIO.LoadImageData(imagePathAndFile, imageToOutline);
+                ImageIO.LoadImageData(imagePathAndFile, imageToOutline);
 
                 int newIndex = asynchMeshesList.Count;
 
