@@ -39,7 +39,7 @@ using MatterHackers.MatterControl.PluginSystem;
 using MatterHackers.MatterControl.DataStorage;
 using MatterHackers.MatterControl;
 using MatterHackers.MatterControl.VersionManagement;
-using MatterHackers.MatterControl.PrintLibrary;
+using MatterHackers.MatterControl.CreatorPlugins;
 
 namespace MatterHackers.MatterControl.Plugins.OutlineCreator
 {
