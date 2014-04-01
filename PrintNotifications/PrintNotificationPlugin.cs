@@ -42,6 +42,7 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
         public void PutInBellButton()
         {
             ImageButtonFactory imageButtonFactory = new ImageButtonFactory();
+            imageButtonFactory.invertImageColor = false;
             string notifyIconPath = Path.Combine("Icons", "PrintStatusControls", "notify.png");
             string notifyHoverIconPath = Path.Combine("Icons", "PrintStatusControls", "notify-hover.png");
             Button notifyButton = imageButtonFactory.Generate(notifyIconPath, notifyHoverIconPath);
@@ -50,9 +51,15 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
             notifyButton.Click += (sender, mouseEvent) => { NotificationFormWindow.Open(); };
             notifyButton.MouseEnterBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.ShowHoverText("Edit notification settings"); };
             notifyButton.MouseLeaveBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.HideHoverText(); };
-
-            GuiWidget topRow = FindNamedWidgetRecursive(mainApplication, "PrintStatusRow.IconContainer");
-            topRow.AddChild(notifyButton);
+            try
+            {
+                GuiWidget topRow = FindNamedWidgetRecursive(mainApplication, "PrintStatusRow.IconContainer");
+                topRow.AddChild(notifyButton);
+            }
+            catch
+            {
+                //
+            }
         }
 
         public void SendPrintFinishedNotification(object sender, EventArgs e)
