@@ -438,7 +438,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
                 List<Vertex> faceVertices = new List<Vertex>();
                 foreach (FaceEdge faceEdgeToAdd in face.FaceEdgeIterator())
                 {
-                    Vertex newVertex = copyMesh.CreateVertex(faceEdgeToAdd.vertex.Position, true);
+                    Vertex newVertex = copyMesh.CreateVertex(faceEdgeToAdd.firstVertex.Position, true);
                     faceVertices.Add(newVertex);
                 }
 
