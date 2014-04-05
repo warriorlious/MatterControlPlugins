@@ -63,12 +63,8 @@ using OpenTK.Graphics.OpenGL;
 
 namespace MatterHackers.MatterControl.Plugins.TextCreator
 {
-    public class View3DTextCreator : PartPreviewBaseWidget
+    public class View3DTextCreator : PartPreview3DWidget
     {
-        MeshViewerWidget meshViewerWidget;
-        Cover buttonRightPanelDisabledCover;
-        FlowLayoutWidget buttonRightPanel;
-
         Slider spacingScrollBar;
         Slider sizeScrollBar;
         Slider heightScrollBar;
@@ -80,9 +76,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
         ProgressControl processingProgressControl;
         FlowLayoutWidget editPlateButtonsContainer;
-        RadioButton rotateViewButton;
-        GuiWidget viewControlsSeparator;
-        RadioButton partSelectButton;
 
         Button saveButton;
         Button saveAndExitButton;
@@ -240,7 +233,29 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             this.AnchorAll();
 
             meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Rotation;
-            AddViewControls();
+
+            Add3DViewControls();
+
+            rotateViewButton.Click += (sender, e) =>
+            {
+                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Rotation;
+            };
+            translateButton.Click += (sender, e) =>
+            {
+                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Translation;
+            };
+            scaleButton.Click += (sender, e) =>
+            {
+                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Scale;
+            };
+            partSelectButton.Click += (sender, e) =>
+            {
+                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.None;
+            };
+            partSelectButton.CheckedStateChanged += (sender, e) =>
+            {
+                SetMeshViewerDisplayTheme();
+            };
 
             // set the view to be a good angle and distance
             meshViewerWidget.TrackballTumbleWidget.TrackBallController.Scale = .06;
@@ -635,65 +650,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
         void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             processingProgressControl.PercentComplete = e.ProgressPercentage;
-        }
-
-        void AddViewControls()
-        {
-            FlowLayoutWidget transformTypeSelector = new FlowLayoutWidget();
-            transformTypeSelector.BackgroundColor = new RGBA_Bytes(0, 0, 0, 120);
-            textImageButtonFactory.FixedHeight = 20;
-            textImageButtonFactory.FixedWidth = 20;
-            string rotateIconPath = Path.Combine("Icons", "ViewTransformControls", "rotate.png");
-            rotateViewButton = textImageButtonFactory.GenerateRadioButton("", rotateIconPath);
-            rotateViewButton.Margin = new BorderDouble(3);
-            transformTypeSelector.AddChild(rotateViewButton);
-            rotateViewButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Rotation;
-            };
-
-            string translateIconPath = Path.Combine("Icons", "ViewTransformControls", "translate.png");
-            RadioButton translateButton = textImageButtonFactory.GenerateRadioButton("", translateIconPath);
-            translateButton.Margin = new BorderDouble(3);
-            transformTypeSelector.AddChild(translateButton);
-            translateButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Translation;
-            };
-
-            string scaleIconPath = Path.Combine("Icons", "ViewTransformControls", "scale.png");
-            RadioButton scaleButton = textImageButtonFactory.GenerateRadioButton("", scaleIconPath);
-            scaleButton.Margin = new BorderDouble(3);
-            transformTypeSelector.AddChild(scaleButton);
-            scaleButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Scale;
-            };
-
-            viewControlsSeparator = new GuiWidget(2, 32);
-            viewControlsSeparator.BackgroundColor = RGBA_Bytes.White;
-            viewControlsSeparator.Margin = new BorderDouble(3);
-            transformTypeSelector.AddChild(viewControlsSeparator);
-
-            string partSelectIconPath = Path.Combine("Icons", "ViewTransformControls", "partSelect.png");
-            partSelectButton = textImageButtonFactory.GenerateRadioButton("", partSelectIconPath);
-            partSelectButton.Margin = new BorderDouble(3);
-            transformTypeSelector.AddChild(partSelectButton);
-            partSelectButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.None;
-            };
-
-            partSelectButton.CheckedStateChanged += (sender, e) =>
-            {
-                SetMeshViewerDisplayTheme();
-            };
-
-            transformTypeSelector.Margin = new BorderDouble(5);
-            transformTypeSelector.HAnchor |= Agg.UI.HAnchor.ParentLeft;
-            transformTypeSelector.VAnchor = Agg.UI.VAnchor.ParentTop;
-            AddChild(transformTypeSelector);
-            rotateViewButton.Checked = true;
         }
 
         private FlowLayoutWidget CreateRightButtonPannel(double buildHeight)
