@@ -454,7 +454,7 @@ namespace MatterHackers.MatterControl.Plugins.OutlineCreator
             {
                 Face face = asynchMeshesList[SelectedMeshIndex].Faces[i];
                 List<Vertex> faceVertices = new List<Vertex>();
-                foreach (FaceEdge faceEdgeToAdd in face.FaceEdgeIterator())
+                foreach (FaceEdge faceEdgeToAdd in face.FaceEdges())
                 {
                     Vertex newVertex = copyMesh.CreateVertex(faceEdgeToAdd.firstVertex.Position, true);
                     faceVertices.Add(newVertex);
