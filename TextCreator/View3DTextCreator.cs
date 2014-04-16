@@ -1033,7 +1033,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
                 printItem.Commit();
 
                 printItem.Name = string.Format("{0}", word);
-                printItem.FileLocation = System.IO.Path.GetFullPath(filePath);
+                printItem.FileLocation = Path.GetFullPath(filePath);
                 printItem.PrintItemCollectionID = PrintLibraryListControl.Instance.LibraryCollection.Id;
                 printItem.Commit();
 
