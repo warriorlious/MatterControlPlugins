@@ -236,27 +236,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
             Add3DViewControls();
 
-            rotateViewButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Rotation;
-            };
-            translateButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Translation;
-            };
-            scaleButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Scale;
-            };
-            partSelectButton.Click += (sender, e) =>
-            {
-                meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.None;
-            };
-            partSelectButton.CheckedStateChanged += (sender, e) =>
-            {
-                SetMeshViewerDisplayTheme();
-            };
-
             // set the view to be a good angle and distance
             meshViewerWidget.TrackballTumbleWidget.TrackBallController.Scale = .06;
             meshViewerWidget.TrackballTumbleWidget.TrackBallController.Rotate(Quaternion.FromEulerAngles(new Vector3(-MathHelper.Tau * .02, 0, 0)));
