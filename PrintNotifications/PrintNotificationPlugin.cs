@@ -10,6 +10,7 @@ using MatterHackers.MatterControl.PluginSystem;
 using MatterHackers.MatterControl.DataStorage;
 using MatterHackers.MatterControl;
 using MatterHackers.MatterControl.VersionManagement;
+using MatterHackers.MatterControl.ActionBar;
 
 namespace MatterHackers.MatterControl.Plugins.PrintNotifications
 {
@@ -25,7 +26,7 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
         {
             mainApplication = application;
             PrinterCommunication.Instance.PrintFinished.RegisterEvent(SendPrintFinishedNotification, ref unregisterEvents);
-            PutInBellButton();
+            PrintStatusRow.OpenNotificationsWindowFunction = OpenNotificationWindowCallBackFunction;
         }
 
         public override string GetPluginInfoJSon()
@@ -39,27 +40,9 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
                 "}";
         }
 
-        public void PutInBellButton()
+        public void OpenNotificationWindowCallBackFunction()
         {
-            ImageButtonFactory imageButtonFactory = new ImageButtonFactory();
-            imageButtonFactory.invertImageColor = false;
-            string notifyIconPath = Path.Combine("Icons", "PrintStatusControls", "notify.png");
-            string notifyHoverIconPath = Path.Combine("Icons", "PrintStatusControls", "notify-hover.png");
-            Button notifyButton = imageButtonFactory.Generate(notifyIconPath, notifyHoverIconPath);
-            notifyButton.Cursor = Cursors.Hand;
-            notifyButton.Margin = new Agg.BorderDouble(top: 3);
-            notifyButton.Click += (sender, mouseEvent) => { NotificationFormWindow.Open(); };
-            notifyButton.MouseEnterBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.ShowHoverText("Edit notification settings"); };
-            notifyButton.MouseLeaveBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.HideHoverText(); };
-            try
-            {
-                GuiWidget topRow = FindNamedWidgetRecursive(mainApplication, "PrintStatusRow.IconContainer");
-                topRow.AddChild(notifyButton);
-            }
-            catch
-            {
-                //
-            }
+            NotificationFormWindow.Open();
         }
 
         public void SendPrintFinishedNotification(object sender, EventArgs e)
