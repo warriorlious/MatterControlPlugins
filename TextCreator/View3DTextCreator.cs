@@ -1023,6 +1023,11 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
                 PrintLibraryListControl.Instance.AddChild(queueItem);
                 PrintLibraryListControl.Instance.Invalidate();
                 PrintLibraryListControl.Instance.SaveLibraryItems();
+
+                // and save to the queue
+                {
+                    QueueData.Instance.AddItem(printItemWrapper);
+                }
             }
 
             //Exit after save
