@@ -26,7 +26,23 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
         {
             mainApplication = application;
             PrinterCommunication.Instance.PrintFinished.RegisterEvent(SendPrintFinishedNotification, ref unregisterEvents);
-            PrintStatusRow.OpenNotificationsWindowFunction = OpenNotificationWindowCallBackFunction;
+            PrintStatusRow.AddIconToPrintStatusRow += AddNotificationButton;
+        }
+
+        private static void AddNotificationButton(GuiWidget iconContainer)
+        {
+            ImageButtonFactory imageButtonFactory = new ImageButtonFactory();
+            imageButtonFactory.invertImageColor = false;
+            string notifyIconPath = Path.Combine("Icons", "PrintStatusControls", "notify.png");
+            string notifyHoverIconPath = Path.Combine("Icons", "PrintStatusControls", "notify-hover.png");
+            Button notifyButton = imageButtonFactory.Generate(notifyIconPath, notifyHoverIconPath);
+            notifyButton.Cursor = Cursors.Hand;
+            notifyButton.Margin = new Agg.BorderDouble(top: 3);
+            notifyButton.Click += (sender, mouseEvent) => { NotificationFormWindow.Open(); };
+            notifyButton.MouseEnterBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.ShowHoverText("Edit notification settings"); };
+            notifyButton.MouseLeaveBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.HideHoverText(); };
+
+            iconContainer.AddChild(notifyButton);
         }
 
         public override string GetPluginInfoJSon()
@@ -38,11 +54,6 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
                 "\"Developer\": \"MatterHackers, Inc.\"," +
                 "\"URL\": \"https://www.matterhackers.com\"" +
                 "}";
-        }
-
-        public void OpenNotificationWindowCallBackFunction()
-        {
-            NotificationFormWindow.Open();
         }
 
         public void SendPrintFinishedNotification(object sender, EventArgs e)
