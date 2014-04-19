@@ -1013,16 +1013,12 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
                 printItem.Name = string.Format("{0}", word);
                 printItem.FileLocation = Path.GetFullPath(filePath);
-                printItem.PrintItemCollectionID = PrintLibraryListControl.Instance.LibraryCollection.Id;
+                printItem.PrintItemCollectionID = LibraryData.Instance.LibraryCollection.Id;
                 printItem.Commit();
 
                 PrintItemWrapper printItemWrapper = new PrintItemWrapper(printItem);
 
-                PrintLibraryListItem queueItem = new PrintLibraryListItem(printItemWrapper);
-
-                PrintLibraryListControl.Instance.AddChild(queueItem);
-                PrintLibraryListControl.Instance.Invalidate();
-                PrintLibraryListControl.Instance.SaveLibraryItems();
+                LibraryData.Instance.AddItem(printItemWrapper);
 
                 // and save to the queue
                 {
