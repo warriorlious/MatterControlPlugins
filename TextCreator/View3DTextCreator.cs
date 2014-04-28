@@ -244,8 +244,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             UnlockEditControls();
             // but make sure we can't use the right panel yet
             buttonRightPanelDisabledCover.Visible = true;
-
-            SetMeshViewerDisplayTheme();
         }
 
         private void InsertTextNow(string text)
@@ -899,21 +897,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             textImageButtonFactory.FixedWidth = 0;
         }
 
-        private void SetMeshViewerDisplayTheme()
-        {
-            meshViewerWidget.TrackballTumbleWidget.RotationHelperCircleColor = ActiveTheme.Instance.PrimaryBackgroundColor;
-            if (partSelectButton.Checked)
-            {
-                meshViewerWidget.PartColor = RGBA_Bytes.White;
-            }
-            else
-            {
-                meshViewerWidget.PartColor = ActiveTheme.Instance.PrimaryAccentColor;
-            }
-            meshViewerWidget.SelectedPartColor = ActiveTheme.Instance.PrimaryAccentColor;
-            meshViewerWidget.BuildVolumeColor = new RGBA_Bytes(ActiveTheme.Instance.PrimaryAccentColor.Red0To255, ActiveTheme.Instance.PrimaryAccentColor.Green0To255, ActiveTheme.Instance.PrimaryAccentColor.Blue0To255, 50);
-        }
-
         private GuiWidget generateHorizontalRule()
         {
             GuiWidget horizontalRule = new GuiWidget();
@@ -924,7 +907,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             return horizontalRule;
         }
 
-        event EventHandler unregisterEvents;
         private void AddHandlers()
         {
             closeButton.Click += new ButtonBase.ButtonEventHandler(onCloseButton_Click);
@@ -939,8 +921,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
                 MergeAndSavePartsToStl();                
 
             };
-
-            ActiveTheme.Instance.ThemeChanged.RegisterEvent(Instance_ThemeChanged, ref unregisterEvents);
         }
 
         bool partSelectButtonWasClicked = false;
@@ -1048,21 +1028,6 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
         void CloseOnIdle(object state)
         {
             Close();
-        }
-
-        public override void OnClosed(EventArgs e)
-        {
-            if (unregisterEvents != null)
-            {
-                unregisterEvents(this, null);
-            }
-            base.OnClosed(e);
-        }
-
-        void Instance_ThemeChanged(object sender, EventArgs e)
-        {
-            SetMeshViewerDisplayTheme();
-            Invalidate();
         }
     }
 }

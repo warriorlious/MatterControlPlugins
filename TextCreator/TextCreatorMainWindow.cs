@@ -65,34 +65,13 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             this.AddChild(part3DView);
             this.AnchorAll();
 
-            AddHandlers();
+            part3DView.Closed += (sender, e) => { Close(); };
 
             Width = 640;
             Height = 480;
 
             ShowAsSystemWindow();
             MinimumSize = new Vector2(400, 300);
-        }
-
-        event EventHandler unregisterEvents;
-        private void AddHandlers()
-        {
-            ActiveTheme.Instance.ThemeChanged.RegisterEvent(Instance_ThemeChanged, ref unregisterEvents);
-            part3DView.Closed += (sender, e) => { Close(); };
-        }
-
-        public override void OnClosed(EventArgs e)
-        {
-            if (unregisterEvents != null)
-            {
-                unregisterEvents(this, null);
-            }
-            base.OnClosed(e);
-        }
-
-        void Instance_ThemeChanged(object sender, EventArgs e)
-        {
-            Invalidate();
         }
     }
 }
