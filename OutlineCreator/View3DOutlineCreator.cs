@@ -156,7 +156,7 @@ namespace MatterHackers.MatterControl.Plugins.OutlineCreator
             buttonBottomPanel.Padding = new BorderDouble(3, 3);
             buttonBottomPanel.BackgroundColor = ActiveTheme.Instance.PrimaryBackgroundColor;
 
-            buttonRightPanel = CreateRightButtonPannel(viewerVolume.y);
+            buttonRightPanel = CreateRightButtonPanel(viewerVolume.y);
 
             // add in the plater tools
             {
@@ -243,7 +243,7 @@ namespace MatterHackers.MatterControl.Plugins.OutlineCreator
 
             AddHandlers();
             UnlockEditControls();
-            // but make sure we can't use the right pannel yet
+            // but make sure we can't use the right panel yet
             buttonRightPanelDisabledCover.Visible = true;
 
             SetMeshViewerDisplayTheme();
@@ -660,7 +660,7 @@ namespace MatterHackers.MatterControl.Plugins.OutlineCreator
             processingProgressControl.PercentComplete = e.ProgressPercentage;
         }
 
-        private FlowLayoutWidget CreateRightButtonPannel(double buildHeight)
+        private FlowLayoutWidget CreateRightButtonPanel(double buildHeight)
         {
             FlowLayoutWidget buttonRightPanel = new FlowLayoutWidget(FlowDirection.TopToBottom);
             buttonRightPanel.Width = 200;
