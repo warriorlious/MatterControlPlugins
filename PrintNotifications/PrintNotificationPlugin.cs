@@ -38,9 +38,24 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
             Button notifyButton = imageButtonFactory.Generate(notifyIconPath, notifyHoverIconPath);
             notifyButton.Cursor = Cursors.Hand;
             notifyButton.Margin = new Agg.BorderDouble(top: 3);
-            notifyButton.Click += (sender, mouseEvent) => { NotificationFormWindow.Open(); };
-            notifyButton.MouseEnterBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.ShowHoverText("Edit notification settings"); };
-            notifyButton.MouseLeaveBounds += (sender, mouseEvent) => { HelpTextWidget.Instance.HideHoverText(); };
+            notifyButton.Click += (sender, mouseEvent) => { 
+                UiThread.RunOnIdle((state) =>
+                {
+                    NotificationFormWindow.Open();
+                });
+            };
+            notifyButton.MouseEnterBounds += (sender, mouseEvent) => {
+                UiThread.RunOnIdle((state) =>
+                {
+                    HelpTextWidget.Instance.ShowHoverText("Edit notification settings");
+                }); 
+            };
+            notifyButton.MouseLeaveBounds += (sender, mouseEvent) => {
+                UiThread.RunOnIdle((state) =>
+                {
+                    HelpTextWidget.Instance.HideHoverText();
+                }); 
+            };
 
             iconContainer.AddChild(notifyButton);
         }

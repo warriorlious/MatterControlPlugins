@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2014, Lars Brubaker
+Copyright (c) 2014, Lars Brubaker & Kevin Pope
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -74,7 +74,6 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
     public class NotificationFormWidget : GuiWidget
     {
         protected TextImageButtonFactory textImageButtonFactory = new TextImageButtonFactory();
-        protected TextImageButtonFactory whiteButtonFactory = new TextImageButtonFactory();
         Button saveButton;
         Button cancelButton;
         Button doneButton;
@@ -171,7 +170,7 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
             submissionStatus = new TextWidget("Saving your settings...", pointSize: 13);
             submissionStatus.AutoExpandBoundsToText = true;
             submissionStatus.Margin = new BorderDouble(0, 5);
-            submissionStatus.TextColor = RGBA_Bytes.White;
+            submissionStatus.TextColor = ActiveTheme.Instance.PrimaryTextColor;
             submissionStatus.HAnchor = HAnchor.ParentLeft;
 
             messageContainer.AddChild(submissionStatus);
@@ -189,7 +188,7 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
                 notifySendTextCheckbox = new CheckBox("Send an SMS notification");
                 notifySendTextCheckbox.Margin = new BorderDouble(0);
                 notifySendTextCheckbox.VAnchor = Agg.UI.VAnchor.ParentBottom;
-                notifySendTextCheckbox.TextColor = RGBA_Bytes.White;
+                notifySendTextCheckbox.TextColor = ActiveTheme.Instance.PrimaryTextColor;
                 notifySendTextCheckbox.Cursor = Cursors.Hand;
                 notifySendTextCheckbox.Checked = (UserSettings.Instance.get("AfterPrintFinishedSendTextMessage") == "true");
                 notifySendTextCheckbox.CheckedStateChanged += new CheckBox.CheckedStateChangedEventHandler(OnSendTextChanged);
@@ -237,7 +236,7 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
                 notifySendEmailCheckbox = new CheckBox("Send an email notification");
                 notifySendEmailCheckbox.Margin = new BorderDouble(0, 2, 0, 16);
                 notifySendEmailCheckbox.HAnchor = Agg.UI.HAnchor.ParentLeft;
-                notifySendEmailCheckbox.TextColor = RGBA_Bytes.White;
+                notifySendEmailCheckbox.TextColor = ActiveTheme.Instance.PrimaryTextColor;
                 notifySendEmailCheckbox.Cursor = Cursors.Hand;
                 notifySendEmailCheckbox.Checked = (UserSettings.Instance.get("AfterPrintFinishedSendEmail") == "true");
                 notifySendEmailCheckbox.CheckedStateChanged += new CheckBox.CheckedStateChangedEventHandler(OnSendEmailChanged);
@@ -275,7 +274,7 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
             notifyPlaySoundCheckbox = new CheckBox("Play a Sound");
             notifyPlaySoundCheckbox.Margin = new BorderDouble(0, 2, 0, 16);
             notifyPlaySoundCheckbox.HAnchor = Agg.UI.HAnchor.ParentLeft;
-            notifyPlaySoundCheckbox.TextColor = RGBA_Bytes.White;
+            notifyPlaySoundCheckbox.TextColor = ActiveTheme.Instance.PrimaryTextColor;
             notifyPlaySoundCheckbox.Checked = (UserSettings.Instance.get("AfterPrintFinishedPlaySound") == "true");
             notifyPlaySoundCheckbox.Cursor = Cursors.Hand;
 
@@ -345,8 +344,18 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
 
         private void AddButtonHandlers()
         {
-            cancelButton.Click += (sender, e) => { Close(); };
-            doneButton.Click += (sender, e) => { Close(); };
+            cancelButton.Click += (sender, e) => {
+                UiThread.RunOnIdle((state) =>
+                {
+                    Close(); 
+                });             
+            };
+            doneButton.Click += (sender, e) => {
+                UiThread.RunOnIdle((state) =>
+                {
+                    Close();
+                }); 
+            };
             saveButton.Click += new ButtonBase.ButtonEventHandler(SubmitContactForm);
         }
 
@@ -410,16 +419,10 @@ namespace MatterHackers.MatterControl.Plugins.PrintNotifications
 
         private void SetButtonAttributes()
         {
-            textImageButtonFactory.normalTextColor = RGBA_Bytes.White;
-            textImageButtonFactory.hoverTextColor = RGBA_Bytes.White;
-            textImageButtonFactory.disabledTextColor = RGBA_Bytes.White;
-            textImageButtonFactory.pressedTextColor = RGBA_Bytes.White;
-
-            whiteButtonFactory.FixedWidth = 138;
-            whiteButtonFactory.normalFillColor = RGBA_Bytes.White;
-            whiteButtonFactory.normalTextColor = RGBA_Bytes.Black;
-            whiteButtonFactory.hoverTextColor = RGBA_Bytes.Black;
-            whiteButtonFactory.hoverFillColor = new RGBA_Bytes(255, 255, 255, 200);
+            textImageButtonFactory.normalTextColor = ActiveTheme.Instance.PrimaryTextColor;
+            textImageButtonFactory.hoverTextColor = ActiveTheme.Instance.PrimaryTextColor;
+            textImageButtonFactory.disabledTextColor = ActiveTheme.Instance.PrimaryTextColor;
+            textImageButtonFactory.pressedTextColor = ActiveTheme.Instance.PrimaryTextColor;
         }
     }
 
