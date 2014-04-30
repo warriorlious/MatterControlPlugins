@@ -682,7 +682,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
                         };
                     }
                        
-                    createUnderline = new CheckBox(new CheckBoxViewText("Underline", textColor: RGBA_Bytes.White));
+                    createUnderline = new CheckBox(new CheckBoxViewText("Underline", textColor: ActiveTheme.Instance.PrimaryTextColor));
                     createUnderline.Checked = true;
                     createUnderline.Margin = new BorderDouble(10, 5);
                     createUnderline.HAnchor = HAnchor.ParentLeft;
@@ -827,7 +827,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
         private static Slider InseretUiForSlider(FlowLayoutWidget wordOptionContainer, string header, double min = 0, double max = .5)
         {
             double scrollBarWidth = 100;
-            TextWidget spacingText = new TextWidget(header, textColor: RGBA_Bytes.White);
+            TextWidget spacingText = new TextWidget(header, textColor: ActiveTheme.Instance.PrimaryTextColor);
             spacingText.Margin = new BorderDouble(10, 3, 3, 5);
             spacingText.HAnchor = HAnchor.ParentLeft;
             wordOptionContainer.AddChild(spacingText);
@@ -853,7 +853,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             GuiWidget horizontalSpacer = new GuiWidget();
             horizontalSpacer.HAnchor = HAnchor.ParentLeftRight;
 
-            TextWidget degreesLabel = new TextWidget("Degrees:", textColor: RGBA_Bytes.White);
+            TextWidget degreesLabel = new TextWidget("Degrees:", textColor: ActiveTheme.Instance.PrimaryTextColor);
             degreesContainer.AddChild(degreesLabel);
             degreesContainer.AddChild(horizontalSpacer);
 
@@ -867,7 +867,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             rotateButtonContainer.HAnchor = HAnchor.ParentLeftRight;
 
             Button rotateZButton = textImageButtonFactory.Generate("", "icon_rotate_32x32.png");
-            TextWidget centeredZ = new TextWidget("Z", pointSize: 10, textColor: RGBA_Bytes.White); centeredZ.Margin = new BorderDouble(3, 0, 0, 0); centeredZ.AnchorCenter(); rotateZButton.AddChild(centeredZ);
+            TextWidget centeredZ = new TextWidget("Z", pointSize: 10, textColor: ActiveTheme.Instance.PrimaryTextColor); centeredZ.Margin = new BorderDouble(3, 0, 0, 0); centeredZ.AnchorCenter(); rotateZButton.AddChild(centeredZ);
             rotateButtonContainer.AddChild(rotateZButton);
             rotateZButton.Click += (object sender, MouseEventArgs mouseEvent) =>
             {
