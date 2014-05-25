@@ -215,6 +215,8 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             centerPartPreviewAndControls.AddChild(buttonRightPanelHolder);
             buttonRightPanelHolder.AddChild(buttonRightPanel);
 
+            viewControls3D = new ViewControls3D(meshViewerWidget);
+
             buttonRightPanelDisabledCover = new Cover(HAnchor.ParentLeftRight, VAnchor.ParentBottomTop);
             buttonRightPanelDisabledCover.BackgroundColor = new RGBA_Bytes(ActiveTheme.Instance.PrimaryBackgroundColor, 150);
             buttonRightPanelHolder.AddChild(buttonRightPanelDisabledCover);
@@ -234,7 +236,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
 
             meshViewerWidget.TrackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Rotation;
 
-            Add3DViewControls();
+            AddChild(viewControls3D);
 
             // set the view to be a good angle and distance
             meshViewerWidget.TrackballTumbleWidget.TrackBallController.Scale = .06;
@@ -324,7 +326,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             {
                 if (meshViewerWidget.TrackballTumbleWidget.TransformState == TrackBallController.MouseDownType.None)
                 {
-                    partSelectButton.ClickButton(null);
+                    viewControls3D.partSelectButton.ClickButton(null);
                     int meshHitIndex;
                     if (FindMeshHitPosition(mouseEvent.Position, out meshHitIndex))
                     {
@@ -407,7 +409,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             PullMeshDataFromAsynchLists();
             saveButton.Visible = true;
             saveAndExitButton.Visible = true;
-            partSelectButton.ClickButton(null);
+            viewControls3D.partSelectButton.ClickButton(null);
 
             // now set the selection to the new copy
             MeshPlatingData[Meshes.Count - 1].currentScale = MeshPlatingData[SelectedMeshIndex].currentScale;
@@ -555,7 +557,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             UnlockEditControls();
             saveButton.Visible = true;
             saveAndExitButton.Visible = true;
-            partSelectButton.ClickButton(null);
+            viewControls3D.partSelectButton.ClickButton(null);
 
             PullMeshDataFromAsynchLists();
         }
@@ -588,14 +590,11 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
         {
             editPlateButtonsContainer.Visible = false;
             buttonRightPanelDisabledCover.Visible = true;
-            if (viewControlsSeparator != null)
+
+            viewControls3D.PartSelectVisible = false;
+            if (meshViewerWidget.TrackballTumbleWidget.TransformState == TrackBallController.MouseDownType.None)
             {
-                viewControlsSeparator.Visible = false;
-                partSelectButton.Visible = false;
-                if (meshViewerWidget.TrackballTumbleWidget.TransformState == TrackBallController.MouseDownType.None)
-                {
-                    rotateViewButton.ClickButton(null);
-                }
+                viewControls3D.rotateButton.ClickButton(null);
             }
         }
 
@@ -604,8 +603,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
             buttonRightPanelDisabledCover.Visible = false;
             processingProgressControl.Visible = false;
 
-            viewControlsSeparator.Visible = true;
-            partSelectButton.Visible = true;
+            viewControls3D.PartSelectVisible = true;
             editPlateButtonsContainer.Visible = true;
         }
 
@@ -910,7 +908,7 @@ namespace MatterHackers.MatterControl.Plugins.TextCreator
         {
             if (Meshes.Count > 0)
             {
-                partSelectButtonWasClicked = partSelectButton.Checked;
+                partSelectButtonWasClicked = viewControls3D.partSelectButton.Checked;
 
                 processingProgressControl.textWidget.Text = "Saving Parts:";
                 processingProgressControl.Visible = true;
